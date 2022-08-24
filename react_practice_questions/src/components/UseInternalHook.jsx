@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 /**
+ * Ques - 3.
  * Create a custom hook useInterval
  * which has the same signature as setInterval
  *
@@ -13,6 +14,21 @@ import { useState } from "react";
  *
  */
 
+const useInterval = (callback, delay) =>{
+  
+  useEffect(()=>{
+    console.log('delay - ', delay );
+    if(delay !== undefined){
+      console.log('set interval')
+      const interval = setInterval(callback, delay);
+      return ()=>{
+        console.log('clear interval')
+        clearInterval(interval);
+      }
+    }
+  }, [delay])
+}
+
 export function UseInternalHook() {
   const [value, setValue] = useState(0);
   const [delay, setDelay] = useState(1000);
@@ -21,7 +37,7 @@ export function UseInternalHook() {
   const incrementCounter = () => {
     setValue((value) => value + 1);
   };
-
+  useInterval(incrementCounter, isPaused ? undefined : delay);
   return (
     <>
       <h1>Count: {value}</h1>
